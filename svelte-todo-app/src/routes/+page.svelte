@@ -9,14 +9,23 @@
     { text: 'プルリクエストをレビューする', done: true },
     { text: '本番リリースをする', done: false }
   ];
+
+  let newTodo: string = '';
+
+  function addTodo() {
+    if (newTodo.trim()) {
+      todos.push({ text: newTodo, done: false });
+      todos = todos;
+    }
+  }
 </script>
 
 <main>
-  <h1>Todoアプリ</h1>
+  <h1>Todo App</h1>
 
-  <input type="text" placeholder="新しいタスク..." />
+  <input type="text" placeholder="新しいタスク..." bind:value={newTodo} />
 
-  <button>追加</button>
+  <button onclick={addTodo} disabled={!newTodo.trim()}>追加</button>
 
   <ul>
     {#each todos as todo, i}
@@ -32,5 +41,10 @@
 <style>
   span.done {
     text-decoration: line-through;
+  }
+
+  button[disabled] {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 </style>
