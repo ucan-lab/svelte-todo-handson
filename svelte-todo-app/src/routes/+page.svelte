@@ -1,3 +1,16 @@
+<script lang="ts">
+  type Todo = {
+    text: string;
+    done: boolean;
+  };
+
+  let todos: Todo[] = [
+    { text: 'ミーティング資料を作る', done: false },
+    { text: 'プルリクエストをレビューする', done: true },
+    { text: '本番リリースをする', done: false }
+  ];
+</script>
+
 <main>
   <h1>Todoアプリ</h1>
 
@@ -6,21 +19,13 @@
   <button>追加</button>
 
   <ul>
-    <li>
-      <input type="checkbox" />
-      <span>ミーティング資料を作る</span>
-      <button>削除</button>
-    </li>
-    <li>
-      <input type="checkbox" />
-      <span class="done">プルリクエストをレビューする</span>
-      <button>削除</button>
-    </li>
-    <li>
-      <input type="checkbox" />
-      <span>本番リリースをする</span>
-      <button>削除</button>
-    </li>
+    {#each todos as todo, i}
+      <li>
+        <input type="checkbox" />
+        <span class={todo.done ? 'done' : ''}>{todo.text}</span>
+        <button>削除</button>
+      </li>
+    {/each}
   </ul>
 </main>
 
