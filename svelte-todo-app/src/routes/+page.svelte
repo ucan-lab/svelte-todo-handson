@@ -1,16 +1,15 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
+
   type Todo = {
     text: string;
     done: boolean;
   };
 
-  let todos: Todo[] = $state([
-    { text: 'ミーティング資料を作る', done: false },
-    { text: 'プルリクエストをレビューする', done: true },
-    { text: '本番リリースをする', done: false }
-  ]);
-
   let newTodo: string = $state('');
+
+  let todos = $state([] as Todo[]);
+  let isInitialized: boolean = $state(false);
 
   function addTodo() {
     if (newTodo.trim()) {
@@ -22,6 +21,34 @@
   function deleteTodo(index: number) {
     todos.splice(index, 1);
   }
+
+  onMount(() => {
+    // ブラウザ上で動いてる時のみ。SSR中(Node.js実行環境)は undefined
+    if (typeof window !== 'undefined') {
+      try {
+        // ローカルストレージから TODO JSON文字列を取得
+        const savedTodos = localStorage.getItem('todos');
+        if (savedTodos) {
+          todos = JSON.parse(savedTodos); // JSON文字列を TODO オブジェクトに変換
+        }
+      } catch (e) {
+        console.error('Failed to load todos from localStorage:', e);
+      } finally {
+        isInitialized = true; // 初期化完了
+      }
+    }
+  });
+
+  $effect(() => {
+    if (isInitialized && typeof window !== 'undefined') {
+      try {
+        // ローカルストレージへTODOオブジェクトをJSON文字列で保存
+        localStorage.setItem('todos', JSON.stringify(todos));
+      } catch (e) {
+        console.error('Failed to save todos to localStorage:', e);
+      }
+    }
+  });
 </script>
 
 <main>
