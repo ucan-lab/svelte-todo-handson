@@ -18,6 +18,10 @@
       newTodo = '';
     }
   }
+
+  function deleteTodo(index: number) {
+    todos.splice(index, 1);
+  }
 </script>
 
 <main>
@@ -41,7 +45,7 @@
       <li>
         <input type="checkbox" bind:checked={todo.done} />
         <span class={todo.done ? 'done' : ''}>{todo.text}</span>
-        <button>削除</button>
+        <button onclick={() => deleteTodo(i)}>削除</button>
       </li>
     {/each}
   </ul>
