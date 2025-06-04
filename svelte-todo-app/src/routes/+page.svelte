@@ -4,18 +4,17 @@
     done: boolean;
   };
 
-  let todos: Todo[] = [
+  let todos: Todo[] = $state([
     { text: 'ミーティング資料を作る', done: false },
     { text: 'プルリクエストをレビューする', done: true },
     { text: '本番リリースをする', done: false }
-  ];
+  ]);
 
-  let newTodo: string = '';
+  let newTodo: string = $state('');
 
   function addTodo() {
     if (newTodo.trim()) {
       todos.push({ text: newTodo, done: false });
-      todos = todos;
     }
   }
 </script>
