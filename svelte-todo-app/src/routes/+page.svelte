@@ -15,6 +15,7 @@
   function addTodo() {
     if (newTodo.trim()) {
       todos.push({ text: newTodo, done: false });
+      newTodo = '';
     }
   }
 </script>
@@ -22,7 +23,16 @@
 <main>
   <h1>Todo App</h1>
 
-  <input type="text" placeholder="新しいタスク..." bind:value={newTodo} />
+  <input
+    type="text"
+    placeholder="新しいタスク..."
+    bind:value={newTodo}
+    onkeydown={(e) => {
+      if (e.key === 'Enter' && !e.isComposing) {
+        addTodo();
+      }
+    }}
+  />
 
   <button onclick={addTodo} disabled={!newTodo.trim()}>追加</button>
 
