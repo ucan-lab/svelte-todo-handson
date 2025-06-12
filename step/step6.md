@@ -2,10 +2,10 @@
 
 ローカルストレージによるデータの永続化
 
-- 初期化: onMountフックを使ってアプリ起動時にlocalStorageからデータを読み込みます
-  - https://svelte.jp/docs/svelte/lifecycle-hooks#onMount
 - 自動保存: $effect(リアクティブな副作)を使ってtodosが変更されるたびに、localStorageへ自動保存します。
   - https://svelte.jp/docs/svelte/$effect
+- 初期化: onMountフックを使ってアプリ起動時にlocalStorageからデータを読み込みます
+  - https://svelte.jp/docs/svelte/lifecycle-hooks#onMount
 
 これにより、ページをリロードしてもTodoリストの内容が保持されるようになりました。
 
@@ -38,6 +38,18 @@
   }
 
   // 修正
+  $effect(() => {
+    if (isInitialized && typeof window !== 'undefined') {
+      try {
+        // ローカルストレージへTODOオブジェクトをJSON文字列で保存
+        localStorage.setItem('todos', JSON.stringify(todos));
+      } catch (e) {
+        console.error('Failed to save todos to localStorage:', e);
+      }
+    }
+  });
+
+  // 修正
   onMount(() => {
     // ブラウザ上で動いてる時のみ。SSR中(Node.js実行環境)は undefined
     if (typeof window !== 'undefined') {
@@ -51,18 +63,6 @@
         console.error('Failed to load todos from localStorage:', e);
       } finally {
         isInitialized = true; // 初期化完了
-      }
-    }
-  });
-
-  // 修正
-  $effect(() => {
-    if (isInitialized && typeof window !== 'undefined') {
-      try {
-        // ローカルストレージへTODOオブジェクトをJSON文字列で保存
-        localStorage.setItem('todos', JSON.stringify(todos));
-      } catch (e) {
-        console.error('Failed to save todos to localStorage:', e);
       }
     }
   });
