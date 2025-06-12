@@ -39,7 +39,7 @@
 
   // 修正
   $effect(() => {
-    if (isInitialized && typeof window !== 'undefined') {
+    if (isInitialized) {
       try {
         // ローカルストレージへTODOオブジェクトをJSON文字列で保存
         localStorage.setItem('todos', JSON.stringify(todos));
